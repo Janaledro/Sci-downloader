@@ -1,0 +1,12 @@
+< ../config.mk
+all:VQ:
+	set -x
+	bin/targets | xargs mk
+
+results/%/index.html: data/Sample_WINTER-1.filtered_final.ann.tsv
+	echo "Descargando información de $stem"
+	set -x
+	mkdir -p `dirname $target`
+	wget -q -O - $BASE_URL/$stem > $target.build \
+        && mv $target.build $target
+
