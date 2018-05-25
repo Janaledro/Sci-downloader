@@ -1,0 +1,3 @@
+#!/bin/bash
+
+echo 'results/PUBMED_PDFS.tsv'
