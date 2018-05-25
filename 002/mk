@@ -1,4 +1,4 @@
-<../config.mk
+	<../config.mk
 all:VQ:
 	set -x
 	bin/targets | xargs mk 
@@ -6,9 +6,15 @@ all:VQ:
 
 results/PUBMED_PDFS.tsv: data/
 	mkdir -p `dirname $target`
-	echo "PMID	TITLE	AUTHOR	YEAR	PDF" > $target.build
-	while read prueba
+	echo "PMID	TITLE	PDF" > $target.build
+	while read pmid
 	do	
-		echo "Generando fila para $prueba"
-		PMID="$prueba"
-		TITLE="$(grep "<title>" data)"
+		echo "Generando fila para $pmid"
+		PMID="$pmid"
+		TITLE="$(grep "<title>" $pmid | tr " " "_" | cut -d ">" -f2)"
+		#AUTHOR=
+		#YEAR=
+		PDF="$(echo $BASE_URL)"
+	echo "$PMID" >> $target.build
+	done < $prereq \
+	&& mv $target.build $target
