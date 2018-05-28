@@ -4,15 +4,15 @@ all:VQ:
 	set -x 
 	bin/targets | xargs mk
 
-results/%/prueba.tsv: data/routes.txt
-	mkdir -p `dirname $targets`
-	echo "PMID	TITLE	DOI"
+results/prueba.tsv: data/routes.txt
+	mkdir -p `dirname $target`
+	echo "PMID	TITLE	DOI" > $target.build
 	while read prueba
 	do
 		echo "generando columna para $prueba"
-		PMID="$(cd -1 data)"
-		TITLE="$(grep '<title>' $prueba | cut -d '>' -f2 | sed -e 's# #_#g')"
-		DOI="$(sed -e "s#>#\n#g" data/*/metadata.html | grep doi: | sed -e "s#;#\n#g" | grep "doi: " | tr " " "\t" | cut -f3 | sort -u)"
+		PMID="$(sed -e 's#>#\n#g' $prueba | grep "pmid=" | sed -e 's#;#\n#g' -e 's#:#\n#g' | grep "pmid=" | sort -u | grep -v '"' | cut -d '=' -f2)"
+		TITLE="$(grep '<title>' $prueba | cut -d '>' -f2 | sed -e 's# #_#g' | sed -e 's#__-#=#g'| cut -d '=' -f1)"
+		DOI="$(sed -e "s#>#\n#g" $prueba | grep doi: | sed -e "s#;#\n#g" | grep "doi: " | tr " " "\t" | cut -f3 | sort -u | grep -v '<')"
 		echo "$PMID	$TITLE	$DOI" >> $target.build
 		echo "
 		[DEBUGGING] PMID es $PMID
