@@ -1,0 +1,11 @@
+< ../config.mk
+
+all:VQ:
+	set -x 
+	bin/targets| xargs mk
+
+results/prueba.txt: data/10521317/metadata.html
+	mkdir -p `dirname $target`
+	pandoc -f html -t plain -o $targets $prereq
+	grep -n "DOI" $targets > $target.build \
+	&& $target.build $target

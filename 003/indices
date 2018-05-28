@@ -1,5 +1,0 @@
-#!/bin/bash
-
-echo "Ejecutando script para obtener promedios de lìneas para dois"
-pandoc -f html -t plain -o data/*/prueba.txt data/*/index.html
-grep -n "DOI:" data/*/prueba.txt

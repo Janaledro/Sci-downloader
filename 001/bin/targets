@@ -2,4 +2,4 @@
 
 source ../config.mk
 
-cut -f35 data/Sample_WINTER-1.filtered_final.ann.tsv | grep -v PUBMED | sed -e "s#,#\n#g" | sed -e "s#^#results/#" -e "s#\$#/index.html#"
+cut -f35 data/Sample_WINTER-1.filtered_final.ann.tsv | grep -v PUBMED | sed -e "s#,#\n#g" | sed -e "s#^#results/#" -e "s#\$#/metadata.html#" | sort -R | head -n13
