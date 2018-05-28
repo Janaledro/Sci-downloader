@@ -1,0 +1,24 @@
+< ../config.mk
+
+all:VQ:
+	set -x 
+	bin/targets | xargs mk
+
+results/%/prueba.tsv: data/routes.txt
+	mkdir -p `dirname $targets`
+	echo "PMID	TITLE	DOI"
+	while read prueba
+	do
+		echo "generando columna para $prueba"
+		PMID="$(cd -1 data)"
+		TITLE="$(grep '<title>' $prueba | cut -d '>' -f2 | sed -e 's# #_#g')"
+		DOI="$(sed -e "s#>#\n#g" data/*/metadata.html | grep doi: | sed -e "s#;#\n#g" | grep "doi: " | tr " " "\t" | cut -f3 | sort -u)"
+		echo "$PMID	$TITLE	$DOI" >> $target.build
+		echo "
+		[DEBUGGING] PMID es $PMID
+		[DEBUGGING] TITLE es $TITLE
+		[DEBUGGING] DOI es $DOI
+		"
+	done < $prereq \
+	&& mv $target.build $target
+
