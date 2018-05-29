@@ -1,5 +1,0 @@
-#!/bin/bash
-
-cut -f1,3 data/prueba.tsv | grep -v PMID | grep -v DOI |  sed -e 's#^#results/#g' -e "s#\t#/#g" -e "s#\$#.pdf#g"
-
-
