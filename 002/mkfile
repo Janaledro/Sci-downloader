@@ -7,7 +7,7 @@ all:VQ:
 	bin/targets | xargs mk 
 
 
-results/%/paper.pdf: data/doi.txt
+results/%.pdf: data/doi.txt
 	set -x
 	mkdir -p `dirname $target`
 	while read DOI
@@ -18,3 +18,9 @@ results/%/paper.pdf: data/doi.txt
 		wget -O results/$(echo $DOI | tr "/" "_" )pdf.build $DOWNLOAD_URL \
 		&& mv results/$(echo $DOI | tr "/" "_" )pdf.build results/$(echo $DOI | tr "/" "_" )pdf
 	done < <(cat $prereq)
+
+data/doi.txt:
+	set -x
+	mkdir -p `dirname $target`
+	cut -f3 data/prueba.tsv | grep -v "DOI" > $target.build \
+	&& mv $target.build $target
