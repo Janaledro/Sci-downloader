@@ -1,0 +1,6 @@
+results/metadata_table.tsv: data
+	set -x
+	mkdir -p `dirname $target`
+	cat $prereq/*.reordered_metadata.tsv \
+	| sort -u -n > $target.build \
+	&& mv $target.build $target

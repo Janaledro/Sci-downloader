@@ -1,0 +1,20 @@
+#!/bin/bash
+
+#cut -f35 data/Sample_WINTER-1.filtered_final.ann.tsv | grep -v PUBMED | sed -e "s#,#\n#g" | sed -e "s#^#results/#" -e "s#\$#/metadata.html#" | sort -R | head -n13
+
+## Process every annotation tsv present in the data forlder
+for I_FILE in data/*.ann.tsv
+do
+	## automatically finding which column is the PUBMED field
+	PUBMEDID_COLUMN=$(head -n1 $I_FILE | tr "\t" "\n" | grep -n "PUBMED" | cut -d":" -f1)
+	## extract pubmed column, and remove header line with tail -n+2 \
+	# | then change comma for newline with tr \
+	# | then sort and remove duplicate pubmed ids with sort -u \
+	# | then manipualte strings to add results/ and .metadata.html to the requested TARGET \
+	# | the remove missing data symbol "\."
+	cut -f$PUBMEDID_COLUMN $I_FILE | tail -n+2 \
+	| tr "," "\n" \
+	| sort -u \
+	| grep -v "\." \
+	| sed -e "s#^#results/#" -e "s#\$#.metadata.html#"
+done

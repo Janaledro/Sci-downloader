@@ -1,0 +1,13 @@
+< ../config.mk
+all:VQ:
+	set -x
+	bin/targets | xargs mk
+
+##Dado que los pubmedis se generaron desde bin/targets, no es necesario aqui especificar que el prereq es un archivo en data/
+results/%.metadata.html:
+	echo "Descargando información del pubmedid $stem"
+	set -x
+	mkdir -p `dirname $target`
+	wget -q -O - $BASE_URL$stem > $target.build \
+        && mv $target.build $target
+

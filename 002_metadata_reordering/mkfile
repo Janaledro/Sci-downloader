@@ -1,0 +1,18 @@
+< ../config.mk
+
+all:VQ:
+	set -x 
+	bin/targets | xargs mk
+
+results/%.reordered_metadata.tsv:Q: data/%.metadata.html
+	mkdir -p `dirname $target`
+	## no header is neccesary since metada is a per line, per sample, per file basis
+	echo "#PMID	TITLE	DOI" > $target.build
+	PMID="$(grep "pmid=" $prereq | tr ":" "\n" | grep "^pmid=" | cut -d";" -f1 | sort -u | cut -d"=" -f2)"
+	TITLE="$(grep '<title>' $prereq | cut -d '>' -f2 | cut -d"." -f1 | sed -e 's# #_#g')"
+	DOI="$(cat $prereq | tr "<" "\n" | grep "doi" | grep "a href=" | head -n1 | cut -d">" -f2)"
+	if [ "$DOI" = "" ]; then
+		DOI="NA"
+	fi
+	echo "$PMID	$TITLE	$DOI" >> $target.build \
+	&& mv $target.build $target

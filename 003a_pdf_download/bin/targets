@@ -1,0 +1,13 @@
+#!/bin/bash
+
+for I_FILE in $(find -L data/ -type f -name "*.reordered_metadata.tsv")
+do
+	## this filter eliminates from targets the lines that have no doi information
+	DOI_STATUS=$(tail -n1 $I_FILE | cut -f3)
+	if [ ! "$DOI_STATUS" = "NA" ]; then
+		echo $I_FILE
+	fi
+done \
+| sed \
+	-e "s#data/#results/#" \
+	-e "s#.reordered_metadata.tsv#.pdf#"

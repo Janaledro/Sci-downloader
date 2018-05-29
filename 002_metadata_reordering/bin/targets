@@ -1,0 +1,8 @@
+#!/bin/bash
+
+find -L data/ \
+	-type f \
+	-name "*.metadata.html" \
+| sed \
+	-e "s#data/#results/#" \
+	-e "s#.metadata.html#.reordered_metadata.tsv#"

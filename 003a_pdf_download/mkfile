@@ -1,0 +1,14 @@
+< ../config.mk
+
+all:VQ:
+	set -x
+	bin/targets | xargs mk 
+
+results/%.pdf:Q: data/%.reordered_metadata.tsv
+	set -x
+	mkdir -p `dirname $target`
+	DOI=$(tail -n1 $prereq | cut -f3)
+	echo "descargando $BASE_URL2$DOI"
+	DOWNLOAD_URL=$(wget -q -O - $BASE_URL2$DOI | grep 'onclick' | cut -d "'" -f2)
+	wget -O $target.build $DOWNLOAD_URL \
+	&& mv $target.build $target
