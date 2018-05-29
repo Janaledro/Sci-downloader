@@ -1,0 +1,13 @@
+< ../config.mk
+
+all:VQ:
+	set -x
+	bin/targets | xargs mk 
+
+results/%: data/%.reordered_metadata.tsv
+	set -x
+	mkdir -p $target.build
+	DOI=$(tail -n1 $prereq | cut -f3)
+	python $SCIHUB_PY -d $DOI -o $target.build \
+	&& mv $target.build $target \
+	&& mv $target/* $target/$stem.pdf
