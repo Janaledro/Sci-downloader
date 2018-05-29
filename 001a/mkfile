@@ -21,4 +21,9 @@ results/prueba.tsv: data/routes.txt
 		"
 	done < $prereq \
 	&& mv $target.build $target
-
+	
+data/routes.txt:
+	set -x
+	mkdir -p `dirname $target`
+	dir -1 data | sed -e "s#^#data/#g" -e "s#\$#/metadata.html#g" > $target.build \
+	&& mv $target.build $target
