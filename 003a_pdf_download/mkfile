@@ -7,8 +7,20 @@ all:VQ:
 results/%.pdf:Q: data/%.reordered_metadata.tsv
 	set -x
 	mkdir -p `dirname $target`
-	DOI=$(tail -n1 $prereq | cut -f3)
+	DOI=$(tail -n1 $prereq | cut -f3 )
 	echo "descargando $BASE_URL2$DOI"
-	DOWNLOAD_URL=$(wget -q -O - $BASE_URL2$DOI | grep 'onclick' | cut -d "'" -f2)
+	DOWNLOAD_URL=$(wget -O - $BASE_URL2$DOI | grep 'onclick' | cut -d "'" -f2)
 	wget -O $target.build $DOWNLOAD_URL \
 	&& mv $target.build $target
+
+##Estas son las líneas que no logro integrar. La idea es que después de descargar los pdfs, se logre identificar los pdfs reales de los captchas descargados.
+
+#Esta primera línea se encarga de eso. Genera una lista de targets, los cuales son pdfs que no lograron descargarse debido al captcha, así que se intenta descargar
+#nuevamente bajo el supuesto de que sci-hub genera captchas al azar 
+	#grep капчу results/* | cut -d ":" -f1 | sort -u | sed -e "s#^#results/#g" > data/failed_pdfs.txt 
+
+#Para evitar que el mk identifique a los archivos y no proceda a la descarga, éstos se eliminan utilizando la misma lista de targets generada por la línea anterior.
+	#cat data/failed_pdfs.txt | rm -fr 
+
+#Después de eliminar los pdfs falsos, se utiliza la lista de targets para reiniciar el mk, pero sólo con aquellos que no lograron descargarse.
+	#cat data/failed_pdfs.txt | xargs mk

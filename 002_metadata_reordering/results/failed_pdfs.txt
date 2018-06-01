@@ -1,0 +1,2 @@
+results/            <h2 style = "color
+results/        <title>Для просмотра статьи разгадайте капчу</title>
