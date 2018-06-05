@@ -14,7 +14,7 @@ because of the captchas.
 A python tool for the same purpose, pdf download using doi.
 
 003b_metadata_table_joining:
-Module for organizing pdfs from the 002_metadata_reordering/results.
+This module takes the results from the 002_metadata_reordering folder and makes a table with the most important information from the metadata.
 
 config.mk:
 Necessary URLs.
