@@ -4,8 +4,8 @@ all:VQ:
 	set -x
 	bin/targets | xargs mk 
 
-results/%.pdf:Q: data/%.reordered_metadata.tsv
-#	set -x
+results/%.pdf: data/%.reordered_metadata.tsv
+	set -x
 	mkdir -p `dirname $target`
 	DOI=$(tail -n1 $prereq | cut -f3 )
 	echo "descargando $BASE_URL2$DOI"
@@ -16,17 +16,19 @@ results/%.pdf:Q: data/%.reordered_metadata.tsv
 	i="1"
 	while [ "$CAPTCHA_STATUS" = "капчу" ]
 	do
-		if [ "$i" -le 10 ]; then
+		if [ "$i" -le 2 ]; then
 			echo "CAPTCHA STATUS = $CAPTCHA_STATUS"
-			sleep 5
+			sleep 10
 			echo "Attempting download again (retry $i)"
 			wget -q -O - $DOWNLOAD_URL > $target.build
 			CAPTCHA_STATUS=$(grep -m1 -o "капчу" $target.build || echo "NO_CAPTCHA")
 			i=$(( $i +1 ))
 		else
 			echo "Maximum download attemps reached. Aborting download"
+			rm $target.build
 			exit 1
 		fi
 	done
 	echo "PDF successfully downloaded"
+	sleep 10
 	mv $target.build $target
