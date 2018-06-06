@@ -16,5 +16,5 @@ results/%.reordered_metadata.tsv:Q: data/%.metadata.html
 	if [ "$DOI" = "" ]; then
 		DOI="NA"
 	fi
-	echo "$PMID	$TITLE	$DOI $AUTHOR	$JOURNAL" >> $target.build \
+	echo "$PMID	$TITLE	$DOI	$AUTHOR	$JOURNAL" >> $target.build \
 	&& mv $target.build $target
